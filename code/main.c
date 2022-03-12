@@ -71,7 +71,6 @@ double step(double measurement, double motion, double measure_sig, double motion
 
 	mu = update_mean(mu, sig, measurement, measure_sig);
 	sig = update_variance(sig, measure_sig);
-	printf("Update: mean = %.15f, sigma = %.15f\n", mu, sig);
 
 	if(mean == true){
 		mu = predict_mean(mu, motion);
