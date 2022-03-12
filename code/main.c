@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 
 double gauss(double mu, double sigma, double x){
@@ -52,31 +53,55 @@ double predict_variance(double var1, double var2){
 	return new_variance;
 }
 
-double kalmanfilter(double measurements[], int count_measurements, double motions[], int count_motions, double measure_sig, double motion_sig, double mu, double sig){
+double kalmanfilter(double measurements[], int count_measurements, double motions[], double measure_sig, double motion_sig, double mu, double sig){
 	for(int i = 0; i < count_measurements; i++){
 		mu = update_mean(mu, sig, measurements[i], measure_sig);
 		sig = update_variance(sig, measure_sig);
-		printf("%.15f", mu);
-		printf(" || ");
-		printf("%.15f", sig);
-  		printf("\n"); 
+		printf("Update: mean = %.15f, sigma = %.15f\n", mu, sig);
 		mu = predict_mean(mu, motions[i]); 	
 		sig = predict_variance(sig, motion_sig);
-		printf("%.15f", mu);
-		printf(" || ");
-		printf("%.15f", sig);
-  		printf("\n"); 
+		printf("Prediction: mean = %.15f, sigma = %.15f\n", mu, sig);
 	}
 	return 0;
 
 }
 
+
+double step(double measurement, double motion, double measure_sig, double motion_sig, double mu, double sig, bool mean){
+
+	mu = update_mean(mu, sig, measurement, measure_sig);
+	sig = update_variance(sig, measure_sig);
+	printf("Update: mean = %.15f, sigma = %.15f\n", mu, sig);
+
+	if(mean == true){
+		mu = predict_mean(mu, motion);
+		return mu;
+	}
+	else{
+		sig = predict_variance(sig, motion_sig);
+		return sig;
+	}
+}
+
 int main(void) {
   double measurements[] = {5, 6, 7, 9, 10};
   double motions[] = {1, 1, 2, 1, 1};
+  double mu = 0;
+  double sig = 10000;
+  double new_mu, new_sig;
+
+  /*kalmanfilter(measurements, 5, motions, 4, 2, 0, 10000);*/
 
 
-  kalmanfilter(measurements, 5, motions, 5, 4, 2, 0, 10000);
+  for(int i = 0; i < 5; i++){
+	  new_mu = step(measurements[i], motions[i], 4, 2, mu, sig, true);
+	  new_sig = step(measurements[i], motions[i], 4, 2, mu, sig, false);
+	  mu = new_mu;
+	  sig = new_sig;
+  }
+
+
+  printf("Final Prediction: mean = %.15f, sigma = %.15f\n", mu, sig);
   
 
   system("pause");
