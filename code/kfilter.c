@@ -1,4 +1,6 @@
 #include <stdbool.h>
+#include "onedkalmanfilter.h"
+
 
 double update_mean(double m1, double var1, double m2, double var2){
 	double new_mean;
