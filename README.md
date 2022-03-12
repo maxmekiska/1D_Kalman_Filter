@@ -6,7 +6,7 @@ Implementation of a one-dimensional Kalman Filter.
 ## How to Compile the code with gcc?
 
 ```shell
-gcc -main.c -o kalman
+gcc -Wall main.c kfilter.c utils.c -o kfilter
 ```
 
 ## References
