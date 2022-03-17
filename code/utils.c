@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <math.h>
 #include "stats.h"
 
@@ -15,4 +16,25 @@ double gauss(double mu, double sigma, double x){
 
 	prob = term1 * term2;
 	return prob;
+}
+
+
+double variance(double num[], int size, bool population) {
+  double squared_sum = 0.0;
+  double result;
+
+
+  for (int i = 0; i < size; ++i) {
+    squared_sum += pow(num[i], 2);
+  }
+  
+  if (population == true){
+    result = squared_sum / size;
+  }
+  
+  else{
+    result = squared_sum / (size - 1); 
+    
+  }
+  return result; 
 }
