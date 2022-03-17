@@ -18,17 +18,22 @@ double gauss(double mu, double sigma, double x){
 	return prob;
 }
 
-
 double variance(double num[], int size, bool population) {
   double squared_sum = 0.0;
+  double mean = 0.0;
   double result;
+  
+  for(int i = 0; i < size; ++i){
+    mean += num[i];
+  } 
+  
+  mean = mean/size;
 
-
-  for (int i = 0; i < size; ++i) {
-    squared_sum += pow(num[i], 2);
+  for(int i = 0; i < size; ++i) {
+    squared_sum += pow((num[i] - mean), 2);
   }
   
-  if (population == true){
+  if(population == true){
     result = squared_sum / size;
   }
   
